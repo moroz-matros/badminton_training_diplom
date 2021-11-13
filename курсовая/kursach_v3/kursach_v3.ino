@@ -85,8 +85,10 @@ void setup() {
   //first_run();
   clear_massiv();
 }
+unsigned long t = 0;
 
 void loop() {
+  t = micros();
   //необходимо пройтись по всем портам S0..S3 выхода и подать на C0..C11 (C16) платы питания высокий сигнал
   for (int i = 0; i < 12; i++) {
     connect_line_rows(i);
@@ -111,6 +113,8 @@ void loop() {
       }
     }
   }
+  Serial.println(micros()-t);
+  t = micros();
   for (int j = 4; j < 7; j++){
     for (int i = 0; i < 12; i++){
       if (massiv[i][j] == true) {
@@ -132,7 +136,10 @@ void loop() {
       }
     }
   }
+  Serial.println(micros()-t);
+  t = micros();
   clear_massiv();
+  Serial.println(micros()-t);
 }
 
 /*
