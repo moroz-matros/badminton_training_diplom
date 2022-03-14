@@ -17,11 +17,10 @@
 
 const int cols = 15;
 const int rows = 16;
-const int mess = 25;
+const int mess = 50;
 int line = 6;
 
 int n = 0;
-int delta_t = 300;
 bool massiv[rows][cols];
 int massiv2[rows][cols];
 
@@ -29,13 +28,6 @@ void clear_massiv() {
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
       massiv[i][j] = false;
-    }
-  }
-}
-
-void clear_massiv2() {
-  for (int i = 0; i < rows; i++) {
-    for (int j = 0; j < cols; j++) {
       massiv2[i][j] = 0;
     }
   }
@@ -63,7 +55,7 @@ const boolean channels [16][4] {
 
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   pinMode(S0_OUTPUT, OUTPUT);
   pinMode(S1_OUTPUT, OUTPUT);
   pinMode(S2_OUTPUT, OUTPUT);
@@ -118,13 +110,19 @@ void loop() {
 
   if (flag) {
     clear_massiv();
-    clear_massiv2();
-    delay(200);
+    digitalWrite(DIODE_RED, LOW);
+    digitalWrite(DIODE_GREEN, HIGH);
     return;
+  } else {
+    digitalWrite(DIODE_GREEN, LOW);
+    digitalWrite(DIODE_RED, LOW);
   }
+  
   for (int i = 0; i < rows; i++) {
-    for (int j = line +1; j < cols; j++) {
-      if ((j != line) && (massiv[i][j] == true)) {
+
+ for (int j = line+1; j < cols; j++) {
+      if (massiv[i][j] == true) {
+        digitalWrite(DIODE_RED, HIGH);
         Serial.print("out ");
         Serial.print(i);
         Serial.print(" ");
@@ -136,7 +134,6 @@ void loop() {
     }
   }
   clear_massiv();
-  clear_massiv2();
 }
 
 int noise() {
@@ -156,18 +153,21 @@ int noise() {
 
     }
   }
+  Serial.println(m+mess);
   Serial.println("Done");
   return m + mess;
 }
 
 void connect_line_rows(int i) {
   //запрещаем работу
+
   digitalWrite(EN_OUTPUT, HIGH);
 
   digitalWrite(S0_OUTPUT, channels[i][0]);
   digitalWrite(S1_OUTPUT, channels[i][1]);
   digitalWrite(S2_OUTPUT, channels[i][2]);
   digitalWrite(S3_OUTPUT, channels[i][3]);
+  
   digitalWrite(EN_OUTPUT, LOW);
   digitalWrite(SIG_OUTPUT, HIGH);
 }
