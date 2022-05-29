@@ -1,0 +1,3 @@
+COM-порт, англ. communications port — сленговое название интерфейса стандарта RS-232)
+
+https://tehnoobzor.com/schemes/computers/2845-interfeys-rs-232-obzor-shema-preobrazovateley-raspinovka-kabeley.html
